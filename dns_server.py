@@ -1,34 +1,32 @@
 #!/usr/bin/env python2
 
+import os
+import django
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
 
-MY_DOMAIN = 'dyndns.mydomain.org'
-DNS_PORT = 10053
+from main import settings
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
+django.setup()
+
+from dns.models import Record
 
 
 class MyResolver(object):
-    def _should_resolve(self, query):
-        if query.type == dns.A:
-            if query.name.name.endswith(MY_DOMAIN):
-                return True
-        return False
-
-    def _resolve(self, query):
-        name = query.name.name
-        answer = dns.RRHeader(
-            name=name,
-            payload=dns.Record_A(address=b'1.2.3.4'),
-        )
-        answers = [answer]
-        authority = []
-        additional = []
-        return answers, authority, additional
-
     def query(self, query, timeout=None):
-        if self._should_resolve(query):
-            return defer.succeed(self._resolve(query))
-        else:
+        try:
+            name = query.name.name
+            rec = Record.objects.get(name=name)
+            answer = dns.RRHeader(
+                name=name,
+                payload=dns.Record_A(address=rec.ip),
+            )
+            answers = [answer]
+            authority = []
+            additional = []
+            return defer.succeed((answers, authority, additional))
+        except Record.DoesNotExist:
             return defer.fail(error.DomainError())
 
 
@@ -39,8 +37,8 @@ def main():
     )
     protocol = dns.DNSDatagramProtocol(controller=factory)
 
-    reactor.listenUDP(DNS_PORT, protocol)
-    reactor.listenTCP(DNS_PORT, factory)
+    reactor.listenUDP(settings.DNS_PORT, protocol)
+    reactor.listenTCP(settings.DNS_PORT, factory)
 
     reactor.run()
 
