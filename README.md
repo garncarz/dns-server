@@ -1,4 +1,4 @@
-# Simple DNS server
+# Django DNS Server
 
 [![Build Status](https://travis-ci.org/garncarz/dns-server.svg?branch=master)](https://travis-ci.org/garncarz/dns-server)
 [![Coverage Status](https://coveralls.io/repos/garncarz/dns-server/badge.svg?branch=master&service=github)](https://coveralls.io/github/garncarz/dns-server?branch=master)
@@ -12,7 +12,7 @@ This is a simple DNS service, aiming to be used as a small DynDNS server, includ
 
 ## Installation
 
-Needed: Python 2.7 (because Twisted's DNS server isn't supported in version 3)
+Needed: Python 2.7 (Twisted's DNS server isn't supported in version 3, unfortunately)
 
 1. `git clone https://github.com/garncarz/dns-server`
 2. `virtualenv2 virtualenv`
