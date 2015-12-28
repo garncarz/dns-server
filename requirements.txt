@@ -1,5 +1,7 @@
 decorator==4.0.6
 Django==1.9
+django-constance==1.1.1
+django-picklefield==0.3.2
 djangorestframework==3.3.2
 ipython==4.0.1
 ipython-genutils==0.1.0

@@ -1,4 +1,5 @@
 import os
+import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'constance',
+    'constance.backends.database',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -114,6 +117,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Dynamic settings
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'DOMAIN': (socket.gethostname(),
+               'Root domain name for which users can set subdomains.'),
+}
 
 
 # Real DNS handling
