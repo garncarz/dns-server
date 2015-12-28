@@ -76,6 +76,21 @@ class RestTestCase(APITestCase):
                                                          name=self.test_name)
                             .count())
 
+    def test_user_update_auto(self):
+        self.test_user_add_auto()
+        rec = models.Record.objects.last()
+
+        ip2 = '3.42.7.11'
+        response = self.client.post(
+            reverse('dns:api:record-list'),
+            {'ip': 'auto'},
+            REMOTE_ADDR = ip2,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        rec.refresh_from_db()
+        self.assertEqual(rec.name, '%s.%s' % (USER_LOGIN, config.DOMAIN))
+        self.assertEqual(rec.ip, ip2)
+
     def test_anonym_cannot_add(self):
         response = self.client.post(
             reverse('dns:api:record-list'),
