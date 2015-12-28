@@ -14,7 +14,7 @@ ADMIN_PASSWORD = 'kejh2k3hr24w'
 class RestTestCase(APITestCase):
 
     test_ip = '1.2.3.4'
-    test_name = 'home.domain.org'
+    test_name = 'home.mydomain.org'
 
     def setUp(self):
         self.admin = User.objects.create_superuser(username=ADMIN_LOGIN,
@@ -41,3 +41,7 @@ class RestTestCase(APITestCase):
         self.assertEqual(0, models.Record.objects.filter(ip=self.test_ip,
                                                      name=self.test_name)
                             .count())
+
+    def test_anonym_cannot_see_list(self):
+        response = self.client.get(reverse('dns:api:record-list'))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

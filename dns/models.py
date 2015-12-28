@@ -4,8 +4,8 @@ from django.db import models
 
 
 class Record(models.Model):
-    name = models.CharField(max_length=100)
-    ip = models.GenericIPAddressField()
+    name = models.CharField(max_length=100, unique=True)
+    ip = models.GenericIPAddressField('IP')
 
     def __unicode__(self):
         return '%s (%s)' % (self.name, self.ip)
