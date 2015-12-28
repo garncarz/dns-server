@@ -1,19 +1,11 @@
-#!/usr/bin/env python2
-
-import os
-import django
+from django.conf import settings
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
 
-from main import settings
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
-django.setup()
-
-from dns.models import Record
+from models import Record
 
 
-class MyResolver(object):
+class Resolver(object):
     def query(self, query, timeout=None):
         try:
             name = query.name.name
@@ -30,9 +22,9 @@ class MyResolver(object):
             return defer.fail(error.DomainError())
 
 
-def main():
+def run():
     factory = server.DNSServerFactory(
-        clients=[MyResolver(),
+        clients=[Resolver(),
                  client.Resolver(resolv='/etc/resolv.conf')]
     )
     protocol = dns.DNSDatagramProtocol(controller=factory)
@@ -41,7 +33,3 @@ def main():
     reactor.listenTCP(settings.DNS_PORT, factory)
 
     reactor.run()
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())

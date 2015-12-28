@@ -1,17 +1,17 @@
 from twisted.names import dns, error
 from twisted.trial import unittest
 
-from dns_server import MyResolver
+from dns.networking import Resolver
 from dns import models
 
 
-class TwistedTestCase(unittest.TestCase):
+class NetworkingTestCase(unittest.TestCase):
 
     test_ip = '1.2.3.4'
     test_name = 'home.mydomain.org'
 
     def setUp(self):
-        self.resolver = MyResolver()
+        self.resolver = Resolver()
 
     def test_resolve(self):
         models.Record.objects.create(ip=self.test_ip, name=self.test_name)

@@ -28,4 +28,4 @@ Needed: `./manage.py migrate` for synchronizing the database schema. (Creates an
 Run (development mode):
 
 - `DEBUG=1 ./manage.py runserver PORT` for Django/REST interface (listens on PORT, 8000 by default)
-- `DEBUG=1 ./dns_server.py` for DNS interface (listens on TCP/UDP 10053)
+- `DEBUG=1 ./manage.py dns_server` for DNS interface (listens on TCP/UDP 10053)
