@@ -9,6 +9,8 @@ class RecordPermission(BasePermission):
             return True
         if not request.user.is_authenticated():
             return False
+        if not 'name' in request.data:
+            return True
         if request.data['name'] == '%s.%s' % (request.user.username,
                                               config.DOMAIN):
             return True

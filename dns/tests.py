@@ -15,10 +15,8 @@ ADMIN_PASSWORD = 'kejh2k3hr24w'
 USER_LOGIN = 'user'
 USER_PASSWORD = 'sdfvu43re2'
 
-DOMAIN = 'mydomain.org'
 
-
-@override_config(DOMAIN=DOMAIN)
+@override_config(DOMAIN='mydomain.org')
 class RestTestCase(APITestCase):
 
     test_ip = '1.2.3.4'
@@ -53,6 +51,19 @@ class RestTestCase(APITestCase):
         self.assertEqual(1, models.Record.objects.filter(ip=self.test_ip,
                                                          name=name)
                             .count())
+
+    def test_user_add_auto(self):
+        self.client.login(username=USER_LOGIN, password=USER_PASSWORD)
+        ip = '3.42.7.1'
+        response = self.client.post(
+            reverse('dns:api:record-list'),
+            {'ip': 'auto'},
+            REMOTE_ADDR = ip,
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        rec = models.Record.objects.last()
+        self.assertEqual(rec.name, '%s.%s' % (USER_LOGIN, config.DOMAIN))
+        self.assertEqual(rec.ip, ip)
 
     def test_user_add_fail(self):
         self.client.login(username=USER_LOGIN, password=USER_PASSWORD)
