@@ -5,12 +5,15 @@ django-picklefield==0.3.2
 djangorestframework==3.3.2
 ipython==4.0.1
 ipython-genutils==0.1.0
+meld3==1.0.2
 path.py==8.1.2
 pexpect==4.0.1
 pickleshare==0.5
 ptyprocess==0.5
 simplegeneric==0.8.1
+supervisor==3.2.0
 traitlets==4.0.0
 Twisted==15.5.0
+uWSGI==2.0.12
 wheel==0.24.0
 zope.interface==4.1.3

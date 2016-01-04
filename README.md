@@ -33,6 +33,57 @@ Run (development mode):
 Creating an admin user: `DEBUG=1 ./manage.py createsuperuser`.
 
 
+## Production use
+
+A dedicated UNIX user (e.g. `dns`) is recommended for deployment of the application.
+
+1. Make sure your server is reponsible for DNS records under the desired subdomain.
+
+    Having a record like `dyndns.mydomain.org. 1800    IN  NS  dns.mydomain.org.`.
+
+2. Route server's port 53 to 10053. (Optional, but recommended, don't run this application as root, please.)
+
+    ```sh
+    # iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-port 10053
+    # iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-port 10053
+    ```
+
+3. Configure Nginx (or other web server) for the web interface.
+
+    ```nginx
+    server {
+        server_name .dns.mydomain.org;
+        location / {
+            include uwsgi_params;
+            uwsgi_pass 127.0.0.1:10090;
+        }
+        location /static/ {
+            alias /home/dns/static/;
+        }
+    }
+    ```
+
+4. Create a custom configuration file (`main/settings_local.py`), or set needed variables as system ones.
+
+    `export SECRET_KEY=jrg2j3hrg2uy3rgy32r` (example), or `export DEBUG=1`
+
+5. Prepare database & static files (needed after every update).
+
+    ```sh
+    ./manage.py migrate
+    ./manage.py collectstatic
+    ```
+
+6. Run the application (both web and DNS interface).
+
+    ```sh
+    mkdir -p ~/log  # needed once
+    supervisord
+    ```
+
+    Daemons can be controlled by `supervisorctl` then. Logs are stored under `~/log`.
+
+
 ## Client usage
 
 After creation of a (non staff) user under the web admin interface (`/auth/user/add/`), the user's credentials can be used to register/update a corresponding subdomain record, by a JSON REST API call. (The root domain is set under `/constance/config/`).

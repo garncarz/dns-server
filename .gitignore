@@ -1,6 +1,9 @@
 *.pyc
 *.sqlite*
+*.pid
 
 build/
 dist/
 *.egg-info/
+
+settings_local.py
