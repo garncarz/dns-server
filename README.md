@@ -12,25 +12,13 @@ This is a simple DNS service, aiming to be used as a small DynDNS server, includ
 
 ## Installation
 
-Needed: Python 2.7 (Twisted's DNS server isn't supported in version 3, unfortunately)
+Needed: Python 2.7 (Twisted's DNS server isn't supported in version 3, unfortunately.)
 
 1. `git clone https://github.com/garncarz/dns-server`
 2. `virtualenv2 virtualenv`
 3. Make sure `virtualenv/bin` is in `PATH`.
 4. `cd dns-server`
 5. `pip install -r requirements.txt`
-
-
-## Run
-
-Needed: `./manage.py migrate` for synchronizing the database schema. (Creates and uses `db.sqlite3` by default.)
-
-Run (development mode):
-
-- `DEBUG=1 ./manage.py runserver PORT` for Django/REST interface (listens on PORT, 8000 by default)
-- `DEBUG=1 ./manage.py dns_server` for DNS interface (listens on TCP/UDP 10053)
-
-Creating an admin user: `DEBUG=1 ./manage.py createsuperuser`.
 
 
 ## Production use
@@ -44,8 +32,8 @@ A dedicated UNIX user (e.g. `dns`) is recommended for deployment of the applicat
 2. Route server's port 53 to 10053. (Optional, but recommended, don't run this application as root, please.)
 
     ```sh
-    # iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-port 10053
-    # iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-port 10053
+    iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-port 10053
+    iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-port 10053
     ```
 
 3. Configure Nginx (or other web server) for the web interface.
@@ -65,7 +53,7 @@ A dedicated UNIX user (e.g. `dns`) is recommended for deployment of the applicat
 
 4. Create a custom configuration file (`main/settings_local.py`), or set needed variables as system ones.
 
-    `export SECRET_KEY=jrg2j3hrg2uy3rgy32r` (example), or `export DEBUG=1`
+    `export SECRET_KEY=jrg2j3hrg2uy3rgy32r` (example)
 
 5. Prepare database & static files (needed after every update).
 
@@ -74,7 +62,11 @@ A dedicated UNIX user (e.g. `dns`) is recommended for deployment of the applicat
     ./manage.py collectstatic
     ```
 
-6. Run the application (both web and DNS interface).
+6. Create an admin user.
+
+    `./manage.py createsuperuser`
+
+7. Run the application (both web and DNS interface).
 
     ```sh
     mkdir -p ~/log  # needed once
@@ -91,40 +83,58 @@ After creation of a (non staff) user under the web admin interface (`/auth/user/
 Example using [HTTPie](http://httpie.org/):
 
 ```sh
-$ http -a user:password POST https://mydomain.org/api/record/ ip=auto
-HTTP/1.0 201 Created
+$ http -a user:password POST https://dns.mydomain.org/api/record/ ip=auto
+HTTP/1.1 200 OK
 Allow: GET, POST, HEAD, OPTIONS
+Connection: keep-alive
 Content-Type: application/json
-Date: Mon, 28 Dec 2015 08:10:10 GMT
-Server: WSGIServer/0.1 Python/2.7.11
+Date: Mon, 04 Jan 2016 10:06:54 GMT
+Server: nginx/1.8.0
+Transfer-Encoding: chunked
 Vary: Accept, Cookie
 X-Frame-Options: SAMEORIGIN
 
 {
     "ip": "1.2.3.4",
-    "name": "user.mydomain.org"
+    "name": "user.dyndns.mydomain.org"
 }
 ```
 
 Checking the result:
 
 ```sh
-$ dig user.mydomain.org @mydomain.org -p 10053
+$ dig user.dyndns.mydomain.org @dns.mydomain.org
 
-; <<>> DiG 9.10.3-P2 <<>> user.mydomain.org @mydomain.org -p 10053
+; <<>> DiG 9.10.2-P3 <<>> user.dyndns.mydomain.org @dns.mydomain.org
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 20974
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26524
 ;; flags: qr ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
 
 ;; QUESTION SECTION:
-;user.mydomain.org.                IN      A
+;user.dyndns.mydomain.org.         IN      A
 
 ;; ANSWER SECTION:
-user.mydomain.org. 0       IN      A       1.2.3.4
+user.dyndns.mydomain.org.  0       IN      A       1.2.3.4
 
-;; Query time: 9 msec
-;; SERVER: 127.0.0.1#10053(127.0.0.1)
-;; WHEN: Mon Dec 28 09:11:46 CET 2015
-;; MSG SIZE  rcvd: 56
+;; Query time: 35 msec
+;; SERVER: 9.8.7.6#53(9.8.7.6)
+;; WHEN: po I 04 11:08:24 CET 2016
+;; MSG SIZE  rcvd: 55
 ```
+
+
+## Developing
+
+`export DEBUG=1` needed.
+
+`./manage.py migrate` synchronizes the database schema. (Creates and uses `db.sqlite3` by default.)
+
+Run:
+
+- `./manage.py runserver PORT` for Django/REST interface (listens on PORT, 8000 by default)
+- `./manage.py dns_server` for DNS interface (listens on TCP/UDP 10053)
+
+`./manage.py createsuperuser` creates an admin user.
+
+`./manage.py test` runs tests.
