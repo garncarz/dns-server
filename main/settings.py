@@ -134,6 +134,10 @@ CONSTANCE_CONFIG = {
 
 DNS_PORT = 10053
 
+# beware of DNS Amplification Attack,
+# set to True only if this is not an open relay
+DNS_RELAY = False
+
 
 # REST API
 

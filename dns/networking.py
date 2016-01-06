@@ -23,10 +23,11 @@ class Resolver(object):
 
 
 def run():
-    factory = server.DNSServerFactory(
-        clients=[Resolver(),
-                 client.Resolver(resolv='/etc/resolv.conf')]
-    )
+    clients = [Resolver()]
+    if settings.DNS_RELAY:
+        clients.append(client.Resolver(resolv='/etc/resolv.conf'))
+
+    factory = server.DNSServerFactory(clients=clients)
     protocol = dns.DNSDatagramProtocol(controller=factory)
 
     reactor.listenUDP(settings.DNS_PORT, protocol)
