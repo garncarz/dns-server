@@ -7,3 +7,9 @@ dist/
 *.egg-info/
 
 settings_local.py
+docker-compose.override.yml
+
+data
+log
+**/*.sqlite
+static

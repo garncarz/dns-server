@@ -2,7 +2,5 @@ Django<1.11
 django-constance
 django-picklefield
 djangorestframework
-ipython
-supervisor
+gunicorn
 Twisted
-uWSGI

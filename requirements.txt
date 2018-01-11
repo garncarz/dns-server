@@ -6,31 +6,14 @@
 #
 attrs==17.2.0             # via automat
 automat==0.6.0            # via twisted
-backports.shutil-get-terminal-size==1.0.0  # via ipython
 constantly==15.1.0        # via twisted
-decorator==4.1.1          # via ipython, traitlets
 django-constance==2.0.0
 django-picklefield==1.0.0
 django==1.10.7
 djangorestframework==3.6.3
-enum34==1.1.6             # via traitlets
+gunicorn==19.7.1
 hyperlink==17.2.1         # via twisted
 incremental==17.5.0       # via twisted
-ipython-genutils==0.2.0   # via traitlets
-ipython==5.4.1
-meld3==1.0.2              # via supervisor
-pathlib2==2.3.0           # via ipython, pickleshare
-pexpect==4.2.1            # via ipython
-pickleshare==0.7.4        # via ipython
-prompt-toolkit==1.0.14    # via ipython
-ptyprocess==0.5.2         # via pexpect
-pygments==2.2.0           # via ipython
-scandir==1.5              # via pathlib2
-simplegeneric==0.8.1      # via ipython
-six==1.10.0               # via automat, pathlib2, prompt-toolkit, traitlets
-supervisor==3.3.2
-traitlets==4.3.2          # via ipython
+six==1.10.0               # via automat
 twisted==17.5.0
-uwsgi==2.0.15
-wcwidth==0.1.7            # via prompt-toolkit
 zope.interface==4.4.2     # via twisted
