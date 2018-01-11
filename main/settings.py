@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': '/data/db.sqlite3',
     }
 }
 
@@ -117,7 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.expanduser('~/static/')
+STATIC_ROOT = '/static/'
 
 
 # Dynamic settings
@@ -132,7 +132,7 @@ CONSTANCE_CONFIG = {
 
 # Real DNS handling
 
-DNS_PORT = 10053
+DNS_PORT = 53
 
 # beware of DNS Amplification Attack,
 # set to True only if this is not an open relay
