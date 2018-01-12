@@ -58,12 +58,27 @@ class RestTestCase(APITestCase):
         response = self.client.post(
             reverse('dns:api:record-list'),
             {'ip': 'auto'},
-            REMOTE_ADDR = ip,
+            REMOTE_ADDR=ip,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         rec = models.Record.objects.last()
         self.assertEqual(rec.name, '%s.%s' % (USER_LOGIN, config.DOMAIN))
         self.assertEqual(rec.ip, ip)
+
+    def test_user_add_auto_behind_proxy(self):
+        self.client.login(username=USER_LOGIN, password=USER_PASSWORD)
+        real_ip = '11.2.36.8'
+        proxy_ip = '101.99.0.6'
+        response = self.client.post(
+            reverse('dns:api:record-list'),
+            {'ip': 'auto'},
+            REMOTE_ADDR=proxy_ip,
+            HTTP_X_FORWARDED_FOR='%s,%s' % (real_ip, proxy_ip),
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        rec = models.Record.objects.last()
+        self.assertEqual(rec.name, '%s.%s' % (USER_LOGIN, config.DOMAIN))
+        self.assertEqual(rec.ip, real_ip)
 
     def test_user_add_fail(self):
         self.client.login(username=USER_LOGIN, password=USER_PASSWORD)
@@ -84,7 +99,7 @@ class RestTestCase(APITestCase):
         response = self.client.post(
             reverse('dns:api:record-list'),
             {'ip': 'auto'},
-            REMOTE_ADDR = ip2,
+            REMOTE_ADDR=ip2,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         rec.refresh_from_db()
