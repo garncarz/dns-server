@@ -1,9 +1,13 @@
+import logging
+
 from django.shortcuts import render
 from rest_framework import viewsets
 
 from . import models
 from . import permissions
 from . import serializers
+
+logger = logging.getLogger(__name__)
 
 
 class RecordViewSet(viewsets.ModelViewSet):
@@ -30,6 +34,9 @@ class RecordViewSet(viewsets.ModelViewSet):
 
         if instance:
             self.get_object = lambda: instance
+            logger.info('Update record: %s' % serializer.data)
             return super(RecordViewSet, self).update(request, *args, **kwargs)
+
         else:
+            logger.info('New record: %s' % serializer.data)
             return super(RecordViewSet, self).create(request, *args, **kwargs)

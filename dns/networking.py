@@ -1,8 +1,12 @@
+import logging
+
 from django.conf import settings
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
 
 from models import Record
+
+logger = logging.getLogger(__name__)
 
 
 class Resolver(object):
@@ -10,6 +14,9 @@ class Resolver(object):
         try:
             name = query.name.name
             rec = Record.objects.get(name=name)
+
+            logger.debug('Responding with %s' % rec)
+
             answer = dns.RRHeader(
                 name=name,
                 payload=dns.Record_A(address=rec.ip),
@@ -17,7 +24,9 @@ class Resolver(object):
             answers = [answer]
             authority = []
             additional = []
+
             return defer.succeed((answers, authority, additional))
+
         except Record.DoesNotExist:
             return defer.fail(error.DomainError())
 
