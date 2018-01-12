@@ -1,6 +1,7 @@
 django<1.11
 django-constance
 django-picklefield
+django-statsd-mozilla
 djangorestframework
 gunicorn
 raven
