@@ -16,7 +16,7 @@ services:
       - django
 
   django:
-    image: dns-server
+    image: garncarz/dns-server
     build: .
     command: gunicorn --bind :8000 --forwarded-allow-ips="*" main.wsgi:application
     volumes:
@@ -24,7 +24,7 @@ services:
       - ./static:/static
 
   dns:
-    image: dns-server
+    image: garncarz/dns-server
     build: .
     command: ./manage.py dns_server
     ports:
