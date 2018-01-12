@@ -1,6 +1,0 @@
-Django<1.11
-django-constance
-django-picklefield
-djangorestframework
-gunicorn
-Twisted

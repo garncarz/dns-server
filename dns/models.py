@@ -8,4 +8,4 @@ class Record(models.Model):
     ip = models.GenericIPAddressField('IP')
 
     def __unicode__(self):
-        return '%s (%s)' % (self.name, self.ip)
+        return '<Record name=%s ip=%s>' % (self.name, self.ip)

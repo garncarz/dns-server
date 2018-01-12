@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'constance',
     'constance.backends.database',
+    'raven.contrib.django.raven_compat',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -78,6 +79,49 @@ DATABASES = {
         'NAME': '/data/db.sqlite3' if not DEBUG
                 else os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
+
+
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s][%(levelname)s] %(name)s '
+                      '%(filename)s:%(funcName)s:%(lineno)d | %(message)s',
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'sentry': {
+            'level': 'INFO',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+    },
+
+    'loggers': {
+        '': {
+            'handlers': ['console', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+
+# Sentry
+
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+RAVEN_CONFIG = {
+    'dsn': SENTRY_DSN,
 }
 
 
