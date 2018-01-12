@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django_statsd.clients import statsd
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
 
@@ -16,6 +17,7 @@ class Resolver(object):
             rec = Record.objects.get(name=name)
 
             logger.debug('Responding with %s' % rec)
+            statsd.incr('record.get')
 
             answer = dns.RRHeader(
                 name=name,

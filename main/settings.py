@@ -35,10 +35,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'constance',
     'constance.backends.database',
+    'django_statsd',
     'raven.contrib.django.raven_compat',
 ]
 
 MIDDLEWARE_CLASSES = [
+    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
+    'django_statsd.middleware.GraphiteMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -105,11 +109,14 @@ LOGGING = {
             'level': 'INFO',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
         },
+        'statsd': {
+            'class': 'django_statsd.loggers.errors.StatsdHandler',
+        },
     },
 
     'loggers': {
         '': {
-            'handlers': ['console', 'sentry'],
+            'handlers': ['console', 'sentry', 'statsd'],
             'level': 'DEBUG',
             'propagate': False,
         },
@@ -123,6 +130,20 @@ SENTRY_DSN = os.getenv('SENTRY_DSN')
 RAVEN_CONFIG = {
     'dsn': SENTRY_DSN,
 }
+
+
+# StatsD
+
+STATSD_HOST = os.getenv('STATSD_HOST', 'localhost')
+STATSD_PORT = int(os.getenv('STATSD_PORT', '8125'))
+STATSD_PREFIX = os.getenv('STATSD_PREFIX', 'dns')
+
+STATSD_PATCHES = [
+    'django_statsd.patches.db',
+    'django_statsd.patches.cache',
+]
+
+STATSD_MODEL_SIGNALS = True
 
 
 # Password validation

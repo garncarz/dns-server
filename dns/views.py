@@ -1,6 +1,6 @@
 import logging
 
-from django.shortcuts import render
+from django_statsd.clients import statsd
 from rest_framework import viewsets
 
 from . import models
@@ -35,8 +35,10 @@ class RecordViewSet(viewsets.ModelViewSet):
         if instance:
             self.get_object = lambda: instance
             logger.info('Update record: %s' % serializer.data)
+            statsd.incr('record.update')
             return super(RecordViewSet, self).update(request, *args, **kwargs)
 
         else:
             logger.info('New record: %s' % serializer.data)
+            statsd.incr('record.new')
             return super(RecordViewSet, self).create(request, *args, **kwargs)
