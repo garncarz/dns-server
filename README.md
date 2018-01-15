@@ -6,7 +6,7 @@
 
 This is a simple DNS service, aiming to be used as a small DynDNS server, including:
 
-- TCP/UDP DNS protocol handler (listening on port 10053; powered by [Twisted](https://twistedmatrix.com/));
+- TCP/UDP DNS protocol handler (powered by [Twisted](https://twistedmatrix.com/));
 - web admin interface (powered by [Django](https://www.djangoproject.com/));
 - REST API interface (enabling authorized users to set name → IP translation; powered by [Django REST framework](http://www.django-rest-framework.org/)).
 
