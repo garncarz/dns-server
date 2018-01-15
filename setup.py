@@ -17,7 +17,7 @@ Topic :: Internet :: Name Service (DNS)
 
 setup(
     name='django-dns-server',
-    version='0.1.0',
+    version='1.0.0',
     author='Ondřej Garncarz',
     author_email='ondrej@garncarz.cz',
     url='https://github.com/garncarz/dns-server',
