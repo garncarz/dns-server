@@ -198,7 +198,7 @@ CONSTANCE_CONFIG = {
 
 # Real DNS handling
 
-DNS_PORT = 53
+DNS_PORT = 10053 if DEBUG else 53
 
 # beware of DNS Amplification Attack,
 # set to True only if this is not an open relay
