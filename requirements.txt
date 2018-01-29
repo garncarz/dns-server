@@ -1,3 +1,5 @@
+behave
+behave-django
 django<1.11
 django-constance
 django-ipware

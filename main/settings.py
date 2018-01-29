@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'constance.backends.database',
     'django_statsd',
     'raven.contrib.django.raven_compat',
+
+    'behave_django',
 ]
 
 MIDDLEWARE_CLASSES = [

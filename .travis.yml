@@ -9,5 +9,6 @@ env:
     - DEBUG=1
 script:
     coverage run --source='.' ./manage.py test
+    ./manage.py behave
 after_success:
     coveralls
