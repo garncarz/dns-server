@@ -12,7 +12,7 @@ def step_impl(context, root_domain):
 @given('there\'s {role} "{login}" with password "{password}"')
 def step_impl(context, role, login, password):
     if role == 'admin':
-        email = f'{login}@{config.DOMAIN}'
+        email = '%s@%s' % (login, config.DOMAIN)
         User.objects.create_superuser(username=login,
                                       email=email,
                                       password=password)
@@ -20,7 +20,7 @@ def step_impl(context, role, login, password):
         User.objects.create_user(username=login,
                                  password=password)
     else:
-        raise NotImplementedError(f'Unknown role: {role}')
+        raise NotImplementedError('Unknown role: %s' % role)
 
 
 @given('we\'re logged in as "{login}" with password "{password}"')
