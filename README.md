@@ -101,6 +101,8 @@ Needed extra: Python 2.7 (Twisted's DNS server isn't supported in version 3, unf
 
 `export DEBUG=1` needed.
 
+`./manage.py makemigrations`
+
 `./manage.py migrate` synchronizes the database schema. (Creates and uses `db.sqlite3` by default.)
 
 Run:

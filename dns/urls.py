@@ -8,4 +8,5 @@ api_router.register(r'record', views.RecordViewSet)
 
 urlpatterns = [
     url(r'^api/', include(api_router.urls, namespace='api')),
+    url(r'^links/(?P<abbr>.*)', views.redirection),
 ]
