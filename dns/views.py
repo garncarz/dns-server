@@ -1,5 +1,6 @@
 import logging
 
+from django.shortcuts import get_object_or_404, redirect
 from django_statsd.clients import statsd
 from rest_framework import viewsets
 
@@ -42,3 +43,8 @@ class RecordViewSet(viewsets.ModelViewSet):
             logger.info('New record: %s' % serializer.data)
             statsd.incr('record.new')
             return super(RecordViewSet, self).create(request, *args, **kwargs)
+
+
+def redirection(request, abbr):
+    redir_obj = get_object_or_404(models.Redirection, abbr=abbr)
+    return redirect(redir_obj.target)
