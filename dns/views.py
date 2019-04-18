@@ -22,6 +22,8 @@ class RecordViewSet(viewsets.ModelViewSet):
         so one can POST a patch without knowing id.
         """
 
+        request.POST._mutable = True
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid()
         name = serializer.data.get('name', None)
