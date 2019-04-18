@@ -1,4 +1,4 @@
-django<1.11
+django
 django-constance
 django-ipware
 django-picklefield
