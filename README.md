@@ -10,6 +10,10 @@ This is a simple DNS service, aiming to be used as a small DynDNS server, includ
 - web admin interface (powered by [Django](https://www.djangoproject.com/));
 - REST API interface (enabling authorized users to set name → IP translation; powered by [Django REST framework](http://www.django-rest-framework.org/)).
 
+Bonus:
+
+- a simple URL redirection system.
+
 
 ## Usage
 
@@ -35,6 +39,9 @@ Run `docker-compose run django ./manage.py migrate` when there's a change in the
 
 Also make sure your server is responsible for DNS records under the desired subdomain.
 (Having a record like `dyndns.mydomain.org. 1800    IN  NS  dns.mydomain.org.`.)
+
+URL redirections are accessible as `http://dns.mydomain.org/links/<abbr>`,
+redirecting to target URLs set under the `dns/redirection` admin view.
 
 
 ### Configuration
