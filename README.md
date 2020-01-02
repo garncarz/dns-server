@@ -120,3 +120,6 @@ Run:
 `./manage.py createsuperuser` creates an admin user.
 
 `./manage.py test` runs tests.
+
+
+<!-- ❄️ Hello to the GitHub Archive! ❄️ -->
