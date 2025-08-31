@@ -5,6 +5,7 @@ from . import views
 
 api_router = routers.DefaultRouter()
 api_router.register(r'record', views.RecordViewSet)
+api_router.register(r'pastebin', views.PastebinViewSet)
 
 app_name = 'dns'
 

@@ -15,3 +15,13 @@ class RecordPermission(BasePermission):
                                               config.DOMAIN):
             return True
         return False
+
+
+class PastebinPermission(BasePermission):
+    
+    def has_permission(self, request, view):
+        # Allow anonymous users to create pastebins (public interface)
+        if view.action == 'create':
+            return True
+        # Only admin can list and retrieve pastebins
+        return request.user.is_authenticated and request.user.is_superuser

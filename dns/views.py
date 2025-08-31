@@ -3,12 +3,19 @@ import logging
 from django.shortcuts import get_object_or_404, redirect
 from django_statsd.clients import statsd
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 
 from . import models
-from . import permissions
+from . import permissions  
 from . import serializers
 
 logger = logging.getLogger(__name__)
+
+
+class PastebinRateThrottle(AnonRateThrottle):
+    scope = 'pastebin'
 
 
 class RecordViewSet(viewsets.ModelViewSet):
@@ -45,6 +52,19 @@ class RecordViewSet(viewsets.ModelViewSet):
             logger.info('New record: %s' % serializer.data)
             statsd.incr('record.new')
             return super(RecordViewSet, self).create(request, *args, **kwargs)
+
+
+class PastebinViewSet(viewsets.ModelViewSet):
+    queryset = models.Pastebin.objects.all()
+    serializer_class = serializers.PastebinSerializer
+    permission_classes = [permissions.PastebinPermission]
+    throttle_classes = [PastebinRateThrottle]
+    lookup_field = 'key'
+
+    def create(self, request, *args, **kwargs):
+        logger.info('New pastebin from IP: %s' % request.META.get('REMOTE_ADDR'))
+        statsd.incr('pastebin.new')
+        return super(PastebinViewSet, self).create(request, *args, **kwargs)
 
 
 def redirection(request, abbr):

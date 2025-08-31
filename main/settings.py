@@ -209,7 +209,10 @@ DNS_RELAY = False
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissions',
-    ]
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'pastebin': '10/hour',  # Limit pastebin uploads to prevent spam
+    }
 }
 
 
