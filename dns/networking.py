@@ -14,6 +14,8 @@ class Resolver(object):
     def query(self, query, timeout=None):
         try:
             name = query.name.name
+            if isinstance(name, bytes):
+                name = name.decode('utf-8')
             rec = Record.objects.get(name=name)
 
             logger.debug('Responding with %s' % rec)

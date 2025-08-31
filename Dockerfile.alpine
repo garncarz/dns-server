@@ -1,0 +1,18 @@
+from python:3-alpine
+
+run mkdir /app
+workdir /app
+
+copy requirements.txt .
+
+# Install build dependencies for Alpine
+run BUILD_DEPS='gcc musl-dev linux-headers' \
+  && apk update \
+  && apk add --no-cache $BUILD_DEPS \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del $BUILD_DEPS
+
+copy . .
+
+volume /data
+run ln -s /data/settings_local.py /app/main/settings_local.py
