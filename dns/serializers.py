@@ -1,5 +1,5 @@
 from constance import config
-from ipware.ip import get_ip
+from ipware import get_client_ip
 from rest_framework import serializers
 
 from . import models
@@ -12,7 +12,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 
     def to_internal_value(self, data):
         if data['ip'] == 'auto':
-            data['ip'] = get_ip(self.context['request'])
+            data['ip'] = get_client_ip(self.context['request'])[0]
         if not ('name' in data and data['name']):
             data['name'] = '%s.%s' % (self.context['request'].user.username,
                                       config.DOMAIN)

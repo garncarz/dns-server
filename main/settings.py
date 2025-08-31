@@ -19,6 +19,9 @@ if 'SECRET_KEY' in os.environ:
 
 ALLOWED_HOSTS = ['*']
 
+# Default auto field type for models
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Application definition
 
@@ -39,7 +42,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
 
@@ -48,7 +51,6 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
