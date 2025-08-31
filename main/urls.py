@@ -1,7 +1,7 @@
-from django.conf.urls import url, include
+from django.urls import re_path, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^', include('dns.urls', namespace='dns')),
-    url(r'^', admin.site.urls),
+    re_path(r'^', include(('dns.urls', 'dns'))),
+    re_path(r'^', admin.site.urls),
 ]

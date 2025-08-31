@@ -102,8 +102,6 @@ user.dyndns.mydomain.org.  0       IN      A       1.2.3.4
 
 ## Developing
 
-Needed extra: Python 2.7 (Twisted's DNS server isn't supported in version 3, unfortunately.)
-
 `pip install -r requirements.txt`
 
 `export DEBUG=1` needed.

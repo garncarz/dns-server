@@ -7,7 +7,7 @@ class RecordPermission(BasePermission):
     def has_permission(self, request, view):
         if request.user.is_superuser:
             return True
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return False
         if not 'name' in request.data:
             return True

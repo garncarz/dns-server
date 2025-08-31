@@ -1,11 +1,11 @@
+from django.test import TestCase
 from twisted.names import dns, error
-from twisted.trial import unittest
 
 from dns.networking import Resolver
 from dns import models
 
 
-class NetworkingTestCase(unittest.TestCase):
+class NetworkingTestCase(TestCase):
 
     test_ip = '1.2.3.4'
     test_name = 'home.mydomain.org'
@@ -15,12 +15,18 @@ class NetworkingTestCase(unittest.TestCase):
 
     def test_resolve(self):
         models.Record.objects.create(ip=self.test_ip, name=self.test_name)
-        response = self.resolver.query(dns.Query(name=self.test_name))
-        self.assertEqual(response.result[0][0].payload.dottedQuad(),
-                         self.test_ip)
+        
+        # Test synchronously since defer.succeed() is immediately available
+        deferred = self.resolver.query(dns.Query(name=self.test_name))
+        
+        # Since this returns defer.succeed(), we can get the result immediately
+        result = deferred.result
+        answers, authority, additional = result
+        self.assertEqual(answers[0].payload.dottedQuad(), self.test_ip)
 
     def test_no_resolve(self):
-        self.failureResultOf(
-            self.resolver.query(dns.Query(name=self.test_name)),
-            error.DomainError
-        )
+        deferred = self.resolver.query(dns.Query(name=self.test_name))
+        
+        # Since this returns defer.fail(), we can get the failure immediately
+        result = deferred.result
+        self.assertIsInstance(result.value, error.DomainError)

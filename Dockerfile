@@ -1,4 +1,4 @@
-from python:2-slim
+from python:3-slim
 
 run mkdir /app
 workdir /app

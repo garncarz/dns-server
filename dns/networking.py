@@ -5,7 +5,7 @@ from django_statsd.clients import statsd
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
 
-from models import Record
+from .models import Record
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +14,8 @@ class Resolver(object):
     def query(self, query, timeout=None):
         try:
             name = query.name.name
+            if isinstance(name, bytes):
+                name = name.decode('utf-8')
             rec = Record.objects.get(name=name)
 
             logger.debug('Responding with %s' % rec)
