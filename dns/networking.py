@@ -5,7 +5,7 @@ from django_statsd.clients import statsd
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
 
-from models import Record
+from .models import Record
 
 logger = logging.getLogger(__name__)
 

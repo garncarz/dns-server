@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
 
@@ -48,7 +48,6 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -210,7 +209,10 @@ DNS_RELAY = False
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissions',
-    ]
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'pastebin': '10/hour',  # Limit pastebin uploads to prevent spam
+    }
 }
 
 
